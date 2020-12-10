@@ -1,8 +1,7 @@
 import torch
 import torch.nn as nn
-from torchprofile import profile_macs
+from torchprofile import profile_macs, profile_acts
 from torchprofile.utils.trace import trace
-
 
 class Model(nn.Module):
     def forward(self, a, b):
@@ -19,4 +18,5 @@ if __name__ == '__main__':
     c0 = torch.randn(2, 3, 20)
     output, (hn, cn) = rnn(input, (h0, c0))
     print(trace(rnn, (input, (h0, c0))))
-    print(profile_macs(rnn, (input, (h0, c0))))
+    print("macs:", profile_macs(rnn, (input, (h0, c0))))
+    print("acts:", profile_acts(rnn, (input, (h0, c0))))

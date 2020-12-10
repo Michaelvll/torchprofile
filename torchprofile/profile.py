@@ -1,12 +1,12 @@
 import warnings
 
-from .handlers import handlers
 from .utils.trace import trace
+from .macs_handlers import handlers as macs_handlers
+from .acts_handlers import handlers as acts_handlers
 
 __all__ = ['profile_macs']
 
-
-def profile_macs(model, args=(), kwargs=None, reduction=sum):
+def profile(model, handlers, args, kwargs, reduction):
     results = dict()
 
     graph = trace(model, args, kwargs)
@@ -26,3 +26,9 @@ def profile_macs(model, args=(), kwargs=None, reduction=sum):
         return reduction(results.values())
     else:
         return results
+
+def profile_macs(model, args=(), kwargs=None, reduction=sum):
+    return profile(model, macs_handlers, args, kwargs, reduction)
+    
+def profile_acts(model, args=(), kwargs=None, reduction=sum):
+    return profile(model, acts_handlers, args, kwargs, reduction)

@@ -1,5 +1,5 @@
 import torch
-from torchprofile import profile_macs
+from torchprofile import profile_macs, profile_acts
 from torchvision import models
 
 if __name__ == '__main__':
@@ -14,4 +14,6 @@ if __name__ == '__main__':
             inputs = torch.randn(1, 3, 299, 299)
 
         macs = profile_macs(model, inputs)
-        print('{}: {:.4g} G'.format(name, macs / 1e9))
+        print('macs {}: {:.4g} G'.format(name, macs / 1e9))
+        acts = profile_acts(model, inputs)
+        print('acts {}: {:.4g} MB'.format(name, acts * 4 / 1024 / 1024))
